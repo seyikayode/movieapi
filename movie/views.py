@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.parsers import MultiPartParser
 from django.shortcuts import get_object_or_404
 from .models import MovieType, MediaType, Videos
 from .serializers import VideosSerializer, MediaTypeSerializer, MovieTypeSerializer
@@ -12,6 +14,14 @@ class MovieTypeList(APIView):
         types = MovieType.objects.all()
         data = MovieTypeSerializer(types, many=True).data
         return Response(data)
+    
+    def post(self, request, *args, **kwargs):
+        movie_serializer = MovieTypeSerializer(data=request.data)
+        if movie_serializer.is_valid():
+            movie_serializer.save()
+            return Response(movie_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(movie_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MediaTypeList(APIView):
@@ -19,14 +29,47 @@ class MediaTypeList(APIView):
         types = get_object_or_404(MovieType, pk=pk)
         media = MediaType.objects.filter(movie_type_id=types)
         data = MediaTypeSerializer(media, many=True).data
-        return Response(data)  
+        return Response(data)
+    
+    def post(self, request, pk):
+        # types = get_object_or_404(MovieType, pk=pk)
+        movie_name = request.data.get('movie_name')
+        genre = request.data.get('genre')
+        cast = request.data.get('cast')
+        season = request.data.get('season')
+        data = {'movie_type': pk, 'movie_name': movie_name, 'genre': genre, 'cast': cast,
+               'season': season}
+        serializer = MediaTypeSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class VideoList(APIView):
+    parser_classes = (MultiPartParser,)
+
     def get(self, request, pk, pk2):
         types = get_object_or_404(MovieType, pk=pk)
         media = get_object_or_404(MediaType, movie_type_id=types, pk=pk2)
         video = Videos.objects.filter(media_type_id=media)
         data = VideosSerializer(video, many=True).data
         return Response(data)
+    
+    def post(self, request, pk, pk2):
+        # types = get_object_or_404(MovieType, pk=pk)
+        # media = get_object_or_404(MediaType, movie_type_id=types, pk=pk2)
+        episode = request.data.get('episode')
+        description = request.data.get('description')
+        thumbnail = request.data.get('thumbnail')
+        video = request.data.get('video')
+        data = {'movie_type': pk, 'media_type': pk2, 'episode': episode, 'description': description,
+               'thumbnail': thumbnail, 'video': video}
+        video_serializer = VideosSerializer(data=data)
+        if video_serializer.is_valid():
+            video_serializer.save()
+            return Response(video_serializer.data, status=status.HTTP_201_CREATED)
+        else: 
+            return Response(video_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         

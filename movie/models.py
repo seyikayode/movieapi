@@ -25,6 +25,7 @@ class MediaType(models.Model):
 
 
 class Videos(models.Model):
+    movie_type = models.ForeignKey(MovieType, on_delete=models.CASCADE)
     media_type = models.ForeignKey(MediaType, on_delete=models.CASCADE)
     episode = models.CharField(max_length=50, blank=True, null=True)
     description = models.TextField()
