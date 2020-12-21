@@ -71,7 +71,6 @@ target/
 # pyenv
 .python-version
 .env
-staticfiles/
 env/
 
 # pipenv
