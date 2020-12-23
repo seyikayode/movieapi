@@ -39,3 +39,15 @@ To create video for a Clip:
 Other endpoints to view each details can be found in:
 /api/v1/
 
+
+#contributions
+
+To contribute to the project:
+1. Install Python (You can skip if you have python already)
+2. pip install virtualenv
+3. run virtualenv env
+4. the env folder will be created then run "env\scripts\activate" You can skip steps 2-4 if you know how to run django already
+5. pip install -r requirements.txt
+6. now you can run the server, python manage.py runserver
+
+You can fork the repo and 
