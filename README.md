@@ -40,7 +40,7 @@ Other endpoints to view each details can be found in:
 /api/v1/
 
 
-#contributions
+# contributions
 
 To contribute to the project:
 1. Install Python (You can skip if you have python already)
@@ -50,4 +50,6 @@ To contribute to the project:
 5. pip install -r requirements.txt
 6. now you can run the server, python manage.py runserver
 
-You can fork the repo and 
+You can fork the repo and pull from the development branch.
+Before committing, create a new branch with contribution title.
+Once you are done with the changes, create a pull request to development.
